@@ -12,7 +12,37 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-resource "aws_iam_role" "example" {
+resource "aws_iam_role" "lambda_role" {
   name               = "lambda_execution_role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+# Define the S3 permissions
+data "aws_iam_policy_document" "lambda_s3_policy" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:GetObject"
+      # "s3:DeleteObject",
+      # "s3:ListAllMyBucket"
+    ]
+    resources = [
+      aws_s3_bucket.neo_bucket.arn,
+      "${aws_s3_bucket.neo_bucket.arn}/*"
+    ]
+  }
+}
+
+# Create the policy from the document
+resource "aws_iam_policy" "lambda_s3_policy" {
+  name        = "neo-lambda-s3-policy"
+  description = "Allows Lambda to read and write to the NEO S3 bucket"
+  policy      = data.aws_iam_policy_document.lambda_s3_policy.json
+}
+
+# Attach to your Lambda role
+resource "aws_iam_role_policy_attachment" "lambda_s3_attachment" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = aws_iam_policy.lambda_s3_policy.arn
 }
