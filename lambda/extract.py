@@ -2,16 +2,11 @@ import requests
 import json
 import boto3
 from datetime import date
-from dotenv import load_dotenv
 import os
-from pprint import pprint
-
-load_dotenv()
 
 def lambda_handler():
         # event, context):
     today = date.today().isoformat()
-    
 
     NASA_API_KEY = os.getenv("NASA_API_KEY")
     # 1. Call the API
@@ -33,7 +28,6 @@ def lambda_handler():
         Prefix = "neo-data-lake-"
     )
     neo_bucket_name = buckets['Buckets'][0]['Name']
-    pprint(neo_bucket_name)
     s3.put_object(
         Bucket=neo_bucket_name,
         Key=f"raw/{today}.json",
@@ -43,4 +37,3 @@ def lambda_handler():
     return {"status": "ingested", "date": today}
 
 
-lambda_handler()

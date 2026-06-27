@@ -7,5 +7,11 @@ variable "aws_region" {
 variable "python_runtime" {
   description = "python runtime for lambda function"
   type        = string
-  default     = "python3.13"
+  default     = "python3.12"
+}
+
+variable "nasa_api_key" {
+  description = "NASA API key for NeoWs"
+  type        = string
+  sensitive   = true
 }
