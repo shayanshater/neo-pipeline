@@ -24,12 +24,12 @@ data "aws_iam_policy_document" "lambda_s3_policy" {
     actions = [
       "s3:PutObject",
       "s3:GetObject"
-      # "s3:DeleteObject",
-      # "s3:ListAllMyBucket"
     ]
     resources = [
-      aws_s3_bucket.neo_bucket.arn,
-      "${aws_s3_bucket.neo_bucket.arn}/*"
+      aws_s3_bucket.neo_bucket_extract.arn,
+      "${aws_s3_bucket.neo_bucket_extract.arn}/*",
+      aws_s3_bucket.neo_bucket_transform.arn,
+      "${aws_s3_bucket.neo_bucket_transform.arn}/*"
     ]
   }
 }
@@ -46,3 +46,11 @@ resource "aws_iam_role_policy_attachment" "lambda_s3_attachment" {
   role       = aws_iam_role.lambda_role.name
   policy_arn = aws_iam_policy.lambda_s3_policy.arn
 }
+
+resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_attachment" {
+  role       = aws_iam_role.lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+
+
