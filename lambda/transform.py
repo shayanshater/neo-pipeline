@@ -9,7 +9,6 @@ from datetime import datetime
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-S3_TRANSFORM_BUCKET_NAME = os.environ["S3_TRANSFORM_BUCKET_NAME"]
 
 def flatten_neo_data(data: dict) -> pd.DataFrame:
     rows = []
@@ -31,6 +30,7 @@ def flatten_neo_data(data: dict) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 def lambda_handler(event, context):
+    
     # Get the file that triggered this Lambda from the event
     bucket = event["Records"][0]["s3"]["bucket"]["name"]
     key = event["Records"][0]["s3"]["object"]["key"]
@@ -46,6 +46,7 @@ def lambda_handler(event, context):
     logger.info(f"Flattened {len(df)} asteroid rows")
 
     # Write parquet to processed bucket
+    S3_TRANSFORM_BUCKET_NAME = os.environ["S3_TRANSFORM_BUCKET_NAME"]
     date_str = key.split("/")[-1].replace(".json", "")
     output_path = f"s3://{S3_TRANSFORM_BUCKET_NAME}/processed/{date_str}.parquet"
     wr.s3.to_parquet(df=df, path=output_path)

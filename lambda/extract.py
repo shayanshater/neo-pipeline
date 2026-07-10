@@ -23,7 +23,7 @@ def lambda_handler(event, context):
             "api_key": NASA_API_KEY  # store in AWS Secrets Manager
         }
     )
-    response.raise_for_status()
+    response.raise_for_status() 
     logger.info("successful NASA API request")
     data = response.json()
 
