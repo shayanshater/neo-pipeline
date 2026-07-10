@@ -50,14 +50,14 @@ resource "aws_lambda_function" "lambda_function_transform" {
   layers = [
     var.aws_wrangler_ami
   ]
-  timeout     = 120  # seconds — increase this
+  timeout     = 120 # seconds — increase this
   memory_size = 256 # MB — optionally increase if needed
 
   source_code_hash = data.archive_file.transform_function.output_base64sha256
 
   environment {
     variables = {
-      S3_BUCKET_NAME = aws_s3_bucket.neo_bucket_extract.bucket
+      S3_BUCKET_NAME           = aws_s3_bucket.neo_bucket_extract.bucket
       S3_TRANSFORM_BUCKET_NAME = aws_s3_bucket.neo_bucket_transform.bucket
     }
   }
@@ -91,10 +91,10 @@ resource "aws_s3_bucket_notification" "uploads" {
 
 # Permission for S3 to invoke the Lambda function
 resource "aws_lambda_permission" "s3_invoke_transform" {
-  statement_id  = "AllowS3Invoke"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.lambda_function_transform.function_name
-  principal     = "s3.amazonaws.com"
-  source_arn    = aws_s3_bucket.neo_bucket_extract.arn
+  statement_id   = "AllowS3Invoke"
+  action         = "lambda:InvokeFunction"
+  function_name  = aws_lambda_function.lambda_function_transform.function_name
+  principal      = "s3.amazonaws.com"
+  source_arn     = aws_s3_bucket.neo_bucket_extract.arn
   source_account = data.aws_caller_identity.current.account_id
 }
