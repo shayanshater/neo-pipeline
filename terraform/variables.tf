@@ -21,8 +21,31 @@ variable "aws_wrangler_ami" {
   type        = string
   default     = "arn:aws:lambda:eu-west-2:336392948345:layer:AWSSDKPandas-Python313:14"
 }
-variable "rds_db_password" {
-  description = "database password for the producition postgres database"
+variable "db_password" {
+  description = "database password for the postgres database"
+  type        = string
+  sensitive   = true
+}
+variable "db_user" {
+  description = "database username for the postgres database"
+  type        = string
+  sensitive   = true
+}
+
+variable "db_name" {
+  description = "database name for the postgres database"
+  type        = string
+  sensitive   = true
+}
+
+variable "db_port" {
+  description = "database port for the postgres database"
+  type        = string
+  sensitive   = true
+}
+
+variable "db_host" {
+  description = "database domain for the postgres database"
   type        = string
   sensitive   = true
 }
