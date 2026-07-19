@@ -10,6 +10,12 @@ variable "python_runtime" {
   default     = "python3.13"
 }
 
+variable "python_version" {
+  description = "python version"
+  type        = string
+  default     = "3.13"
+}
+
 variable "nasa_api_key" {
   description = "NASA API key for NeoWs"
   type        = string

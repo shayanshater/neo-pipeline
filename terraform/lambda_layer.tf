@@ -15,7 +15,7 @@ resource "terraform_data" "python_layer_deps" {
         --target package/python \
         --platform manylinux2014_x86_64 \
         --implementation cp \
-        --python-version 3.12 \
+        --python-version ${var.python_version} \
         --only-binary=:all:
     EOT
     interpreter = ["/bin/bash", "-c"]
